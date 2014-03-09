@@ -1,0 +1,45 @@
+#!/bin/bash
+
+problem_number="$1"
+problem_name="$2"
+
+if [ -z "$problem_number" -o -z "$problem_name" ]; then
+  echo "Usage: $0 <problem number> <problem name>"
+  exit 1
+fi
+
+if [ -d "$problem_number" ]; then
+  echo "Error: directory $problem_number already exists!"
+  exit 2
+fi
+
+mkdir "$problem_number"
+cd "$problem_number"
+
+main_filename="${problem_name}.cpp"
+
+cat > "$main_filename" <<EOF
+#include <fstream>
+
+using namespace std;
+
+void solve(istream &in, ostream &out) {
+}
+
+int main() {
+  ifstream in("${problem_name}.in");
+  ofstream out("${problem_name}.out");
+  solve(in, out);
+  return 0;
+}
+EOF
+
+cat > Makefile <<EOF
+CPP = g++-4.8
+CPPFLAGS = -Wall -O2
+
+exec: $main_filename
+	\${CPP} \${CPPFLAGS} \$^ -o \$@
+EOF
+
+make

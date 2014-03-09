@@ -1,0 +1,11 @@
+#!/bin/bash
+
+main_filename=$(basename `find -name *.cpp | head -n 1`)
+problem_name=${main_filename%.cpp}
+input_filename="${problem_name}.in"
+output_filename="${problem_name}.out"
+
+vim "$input_filename"
+rm -f "$output_filename"
+/usr/bin/time -f 'Time: %e (seconds)\nMemory: %M (kbytes)' ./exec
+cat "$output_filename"
