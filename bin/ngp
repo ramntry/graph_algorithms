@@ -19,24 +19,55 @@ cd "$problem_number"
 main_filename="${problem_name}.cpp"
 
 cat > "$main_filename" <<EOF
-#include <fstream>
+#include <cassert>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
+#include <vector>
+#include <bitset>
+#include <iostream>
+#include <algorithm>
+#include <set>
+#include <map>
+
+#ifdef OFFLINE
+#  define LLD "%lld"
+#  define LLU "%llu"
+#  define LLX "%llx"
+#else
+#  define LLD "%I64d"
+#  define LLU "%I64u"
+#  define LLX "%I64x"
+#endif
+
+#define scan(n, ...) assert(fscanf(in, __VA_ARGS__) == n)
+#define print(...) fprintf(out, __VA_ARGS__)
+#ifdef OFFLINE
+# define debug(...) fprintf(stderr, __VA_ARGS__)
+#else
+# define debug(...) (void)0
+#endif
 
 using namespace std;
 
-void solve(istream &in, ostream &out) {
+void solve(FILE *in, FILE *out) {
 }
 
 int main() {
-  ifstream in("${problem_name}.in");
-  ofstream out("${problem_name}.out");
+  FILE *in  = fopen("${problem_name}.in",  "r");
+  FILE *out = fopen("${problem_name}.out", "w");
+  assert(in);
+  assert(out);
   solve(in, out);
+  fclose(out);
+  fclose(in);
   return 0;
 }
 EOF
 
 cat > Makefile <<EOF
-CPP = g++-4.8
-CPPFLAGS = -Wall -O2
+CPP = g++-4.7
+CPPFLAGS = -std=c++03 -Wall -O2 -g -D OFFLINE
 
 exec: $main_filename
 	\${CPP} \${CPPFLAGS} \$^ -o \$@
